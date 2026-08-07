@@ -75,7 +75,7 @@ export function Review({ draft, brand }: { draft: CampaignDraft; brand: Brand | 
           <MobileOfferDetailPreview
             campaignName={draft.name}
             brandName={brand?.name || "Your Brand"}
-            logoUrl={draft.logoUrl ?? brand?.logoUrl ?? null}
+            logoUrl={draft.logoUrl}
             bannerUrl={draft.bannerUrl}
             primaryColor={brand?.logoColor || "#0E3B2E"}
             cashbackPercent={draft.cashbackPercent}

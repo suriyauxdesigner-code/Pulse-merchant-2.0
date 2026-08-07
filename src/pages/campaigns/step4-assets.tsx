@@ -1,20 +1,15 @@
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { FileUpload } from "@/components/shared/file-upload"
-import type { Brand } from "@/lib/types"
 import type { CampaignDraft } from "./campaign-draft-types"
 
 export function Step4Assets({
   draft,
   onUpdate,
-  brand,
 }: {
   draft: CampaignDraft
   onUpdate: (patch: Partial<CampaignDraft>) => void
-  brand: Brand | undefined
 }) {
-  const effectiveLogo = draft.logoUrl ?? brand?.logoUrl ?? null
-
   return (
     <div className="space-y-6">
       <div>
@@ -28,7 +23,7 @@ export function Step4Assets({
         <div className="space-y-2">
           <Label>Logo</Label>
           <p className="text-xs text-muted-foreground">Upload a different logo just for this campaign, if needed.</p>
-          <FileUpload value={effectiveLogo} onChange={(v) => onUpdate({ logoUrl: v })} hint="PNG, transparent background" />
+          <FileUpload value={draft.logoUrl} onChange={(v) => onUpdate({ logoUrl: v })} hint="PNG, transparent background" />
         </div>
 
         <div className="space-y-2">

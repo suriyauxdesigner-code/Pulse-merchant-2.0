@@ -31,9 +31,11 @@ export function CampaignWizardPage() {
   const [step, setStep] = React.useState(1)
   const [draft, setDraft] = React.useState(() => {
     const initialBrandId = preselectedBrandId || onboardedBrands[0]?.id || ""
+    const initialBrand = onboardedBrands.find((b) => b.id === initialBrandId)
     const base = emptyCampaignDraft(initialBrandId)
-    const suggested = budgetForBrand(onboardedBrands.find((b) => b.id === initialBrandId))
+    const suggested = budgetForBrand(initialBrand)
     if (suggested) base.budget = suggested
+    base.logoUrl = initialBrand?.logoUrl ?? null
     return base
   })
   const [submittedId, setSubmittedId] = React.useState<string | null>(null)
@@ -44,8 +46,10 @@ export function CampaignWizardPage() {
     setDraft((d) => {
       const next = { ...d, ...patch }
       if (patch.brandId && patch.brandId !== d.brandId) {
-        const suggested = budgetForBrand(onboardedBrands.find((b) => b.id === patch.brandId))
+        const newBrand = onboardedBrands.find((b) => b.id === patch.brandId)
+        const suggested = budgetForBrand(newBrand)
         if (suggested) next.budget = suggested
+        next.logoUrl = newBrand?.logoUrl ?? null
       }
       return next
     })
@@ -97,7 +101,7 @@ export function CampaignWizardPage() {
       holdPeriodDays: draft.holdPeriodDays,
       minSpend: draft.minSpend,
       bannerUrl: draft.bannerUrl,
-      logoUrl: draft.logoUrl ?? brand?.logoUrl ?? null,
+      logoUrl: draft.logoUrl,
       primaryColor: brand?.logoColor || "#0E3B2E",
       description: draft.description,
       startDate: draft.startDate,
@@ -131,7 +135,7 @@ export function CampaignWizardPage() {
         <CardContent className="p-6 sm:p-8">
           {step === 1 && <Step1Basics draft={draft} onUpdate={update} brands={onboardedBrands} />}
           {step === 2 && <Step2Budget draft={draft} onUpdate={update} brand={brand} />}
-          {step === 3 && <Step4Assets draft={draft} onUpdate={update} brand={brand} />}
+          {step === 3 && <Step4Assets draft={draft} onUpdate={update} />}
           {step === 4 && <Review draft={draft} brand={brand} />}
         </CardContent>
       </Card>
