@@ -53,7 +53,7 @@ export function CampaignDetailsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div>
       <Link to="/" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground">
         <ArrowLeft className="size-3.5" />
         Back to Campaign
@@ -80,7 +80,7 @@ export function CampaignDetailsPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+      <div className="grid gap-5 lg:grid-cols-[1fr_300px]">
         <div className="space-y-5">
           {isLive || isCompleted ? (
             <div className="grid grid-cols-2 gap-4">
@@ -104,68 +104,72 @@ export function CampaignDetailsPage() {
             </Card>
           )}
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Budget Utilization</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-end justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Spent</p>
-                  <p className="text-2xl font-bold text-foreground">AED {campaign.spent.toLocaleString()}</p>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Budget Utilization</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Spent</p>
+                    <p className="text-2xl font-bold text-foreground">AED {campaign.spent.toLocaleString()}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground">Remaining</p>
+                    <p className="text-lg font-semibold text-foreground">AED {remaining.toLocaleString()}</p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Remaining</p>
-                  <p className="text-lg font-semibold text-foreground">AED {remaining.toLocaleString()}</p>
-                </div>
-              </div>
-              <Progress value={spentPercent} />
-              <p className="text-xs text-muted-foreground">{spentPercent}% of AED {campaign.budget.toLocaleString()} total budget used</p>
-            </CardContent>
-          </Card>
+                <Progress value={spentPercent} />
+                <p className="text-xs text-muted-foreground">{spentPercent}% of AED {campaign.budget.toLocaleString()} total budget used</p>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Cashback Settings</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-3">
-              <TimelineItem icon={<Percent className="size-4" />} label="Cashback" value={`${campaign.cashbackPercent}%`} />
-              <TimelineItem icon={<Wallet className="size-4" />} label="Cap per customer" value={campaign.cashbackCap ? `AED ${campaign.cashbackCap}` : "—"} />
-              <TimelineItem icon={<ShieldCheck className="size-4" />} label="Hold period" value={`${campaign.holdPeriodDays} days`} />
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Cashback Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3.5">
+                <TimelineItem icon={<Percent className="size-4" />} label="Cashback" value={`${campaign.cashbackPercent}%`} />
+                <TimelineItem icon={<Wallet className="size-4" />} label="Cap per customer" value={campaign.cashbackCap ? `AED ${campaign.cashbackCap}` : "—"} />
+                <TimelineItem icon={<ShieldCheck className="size-4" />} label="Hold period" value={`${campaign.holdPeriodDays} days`} />
+              </CardContent>
+            </Card>
+          </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Bank Partner</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {bank ? (
-                <div className="flex items-center gap-3">
-                  <LogoTile name={bank.shortName} color={bank.color} shape="circle" />
-                  <span className="text-sm font-medium text-foreground">{bank.name}</span>
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">No bank partner assigned yet.</p>
-              )}
-            </CardContent>
-          </Card>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Bank Partner</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {bank ? (
+                  <div className="flex items-center gap-3">
+                    <LogoTile name={bank.shortName} color={bank.color} shape="circle" />
+                    <span className="text-sm font-medium text-foreground">{bank.name}</span>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No bank partner assigned yet.</p>
+                )}
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Timeline</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-3">
-              <TimelineItem icon={<Calendar className="size-4" />} label="Submitted" value={formatDate(campaign.submittedAt)} />
-              <TimelineItem icon={<Calendar className="size-4" />} label="Start Date" value={formatDate(campaign.startDate)} />
-              <TimelineItem icon={<Calendar className="size-4" />} label="End Date" value={campaign.budgetUtilization === "exhaust" ? "Until exhausted" : formatDate(campaign.endDate)} />
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Timeline</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3.5">
+                <TimelineItem icon={<Calendar className="size-4" />} label="Submitted" value={formatDate(campaign.submittedAt)} />
+                <TimelineItem icon={<Calendar className="size-4" />} label="Start Date" value={formatDate(campaign.startDate)} />
+                <TimelineItem icon={<Calendar className="size-4" />} label="End Date" value={campaign.budgetUtilization === "exhaust" ? "Until exhausted" : formatDate(campaign.endDate)} />
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         <div>
           <p className="mb-3 text-sm font-medium text-muted-foreground">What shoppers see</p>
-          <div className="rounded-[var(--radius)] border border-dashed border-border bg-muted/30 p-5">
+          <div className="rounded-[var(--radius)] border border-dashed border-border bg-muted/30 p-4">
             <MobileOfferDetailPreview
               campaignName={campaign.name}
               brandName={brand?.name || "Brand"}
