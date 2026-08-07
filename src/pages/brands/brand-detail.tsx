@@ -14,7 +14,7 @@ import { OptionalTagPicker } from "@/components/shared/optional-tag-picker"
 import { LogoTile } from "@/components/shared/logo-tile"
 import { FileUpload } from "@/components/shared/file-upload"
 import { ColorSwatchPicker } from "@/components/shared/color-swatch-picker"
-import { MerchantSetupFields } from "@/components/shared/merchant-setup-fields"
+import { MerchantSetupFields, makeEmptyMerchantAccount } from "@/components/shared/merchant-setup-fields"
 import { CampaignsTable } from "@/components/shared/campaigns-table"
 import { CATEGORY_OPTIONS, KNOWN_BRANDS, SHOP_CHANNEL_OPTIONS, TERMINAL_CHANNEL_OPTIONS } from "@/lib/data"
 import { useAppStore } from "@/lib/store"
@@ -276,12 +276,12 @@ export function BrandDetailPage() {
                               ...form.merchantSetup,
                               knowsMerchantId: true,
                               needsLuneContact: false,
-                              terminals:
-                                form.merchantSetup.terminals.length > 0
-                                  ? form.merchantSetup.terminals
-                                  : [{ id: `term-${Math.random().toString(36).slice(2, 9)}`, terminalId: "", channel: "in_store" }],
+                              merchantAccounts:
+                                form.merchantSetup.merchantAccounts.length > 0
+                                  ? form.merchantSetup.merchantAccounts
+                                  : [makeEmptyMerchantAccount()],
                             }
-                          : { knowsMerchantId: false, merchantId: "", terminals: [], needsLuneContact: true },
+                          : { knowsMerchantId: false, merchantAccounts: [], needsLuneContact: true },
                     })
                   }
                   className="grid grid-cols-2 gap-3"
@@ -330,16 +330,21 @@ export function BrandDetailPage() {
                       <ShieldCheck className="mt-0.5 size-4 shrink-0 text-success-foreground" />
                       <p className="text-sm font-medium text-success-foreground">Merchant setup verified</p>
                     </div>
-                    <div className="rounded-[var(--radius-sm)] border border-border px-4 py-3">
-                      <p className="text-sm font-semibold text-foreground">{brand.merchantSetup.merchantId}</p>
-                      <p className="text-xs text-muted-foreground mb-2.5">Merchant ID</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {brand.merchantSetup.terminals.map((t) => (
-                          <Badge key={t.id} variant="outline">
-                            {t.terminalId} · {TERMINAL_CHANNEL_OPTIONS.find((o) => o.value === t.channel)?.label}
-                          </Badge>
-                        ))}
-                      </div>
+                    <div className="space-y-3">
+                      {brand.merchantSetup.merchantAccounts.map((account) => (
+                        <div key={account.id} className="rounded-[var(--radius-sm)] border border-border px-4 py-3">
+                          <p className="text-sm font-semibold text-foreground">{account.merchantId}</p>
+                          <p className="text-xs text-muted-foreground mb-2.5">Merchant ID</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {account.terminals.map((t) => (
+                              <Badge key={t.id} variant="outline">
+                                {t.terminalId} · {TERMINAL_CHANNEL_OPTIONS.find((o) => o.value === t.channel)?.label}
+                                {t.label ? ` · ${t.label}` : ""}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </>
                 )}

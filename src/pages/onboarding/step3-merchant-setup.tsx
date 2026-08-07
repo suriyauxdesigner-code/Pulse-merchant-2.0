@@ -1,7 +1,7 @@
 import { HelpCircle, MailQuestion } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { MerchantSetupFields } from "@/components/shared/merchant-setup-fields"
+import { MerchantSetupFields, makeEmptyMerchantAccount } from "@/components/shared/merchant-setup-fields"
 import type { Brand, MerchantSetup } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -14,8 +14,7 @@ export function Step3MerchantSetup({
 }) {
   const setup: MerchantSetup = draft.merchantSetup || {
     knowsMerchantId: null,
-    merchantId: "",
-    terminals: [],
+    merchantAccounts: [],
     needsLuneContact: false,
   }
 
@@ -26,10 +25,10 @@ export function Step3MerchantSetup({
       patchSetup({
         knowsMerchantId: true,
         needsLuneContact: false,
-        terminals: setup.terminals.length > 0 ? setup.terminals : [{ id: `term-${Math.random().toString(36).slice(2, 9)}`, terminalId: "", channel: "in_store" }],
+        merchantAccounts: setup.merchantAccounts.length > 0 ? setup.merchantAccounts : [makeEmptyMerchantAccount()],
       })
     } else {
-      patchSetup({ knowsMerchantId: false, needsLuneContact: true, merchantId: "", terminals: [] })
+      patchSetup({ knowsMerchantId: false, needsLuneContact: true, merchantAccounts: [] })
     }
   }
 
@@ -100,7 +99,12 @@ export function step3IsValid(draft: Partial<Brand>) {
   if (!setup) return false
   if (setup.knowsMerchantId === false) return true
   if (setup.knowsMerchantId === true) {
-    return setup.merchantId.trim().length > 0 && setup.terminals.some((t) => t.terminalId.trim().length > 0)
+    return (
+      setup.merchantAccounts.length > 0 &&
+      setup.merchantAccounts.every(
+        (a) => a.merchantId.trim().length > 0 && a.terminals.some((t) => t.terminalId.trim().length > 0)
+      )
+    )
   }
   return false
 }

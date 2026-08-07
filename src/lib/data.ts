@@ -101,11 +101,16 @@ export function buildSeedBrands(): Brand[] {
       },
       merchantSetup: {
         knowsMerchantId: true,
-        merchantId: "MID-7743-2210",
-        terminals: [
-          { id: "t-faces-1", terminalId: "TID-00921", channel: "in_store" },
-          { id: "t-faces-2", terminalId: "TID-00922", channel: "in_store" },
-          { id: "t-faces-3", terminalId: "TID-ONLINE-14", channel: "online" },
+        merchantAccounts: [
+          {
+            id: "acc-faces-1",
+            merchantId: "MID-7743-2210",
+            terminals: [
+              { id: "t-faces-1", terminalId: "TID-00921", channel: "in_store", label: "Mall of the Emirates" },
+              { id: "t-faces-2", terminalId: "TID-00922", channel: "in_store", label: "Dubai Mall" },
+              { id: "t-faces-3", terminalId: "TID-ONLINE-14", channel: "online", label: "Website" },
+            ],
+          },
         ],
         needsLuneContact: false,
       },
@@ -130,8 +135,13 @@ export function buildSeedBrands(): Brand[] {
       },
       merchantSetup: {
         knowsMerchantId: true,
-        merchantId: "MID-7743-3381",
-        terminals: [{ id: "t-tryano-1", terminalId: "TID-00921", channel: "in_store" }],
+        merchantAccounts: [
+          {
+            id: "acc-tryano-1",
+            merchantId: "MID-7743-3381",
+            terminals: [{ id: "t-tryano-1", terminalId: "TID-00921", channel: "in_store", label: "Dubai Mall" }],
+          },
+        ],
         needsLuneContact: false,
       },
     },
@@ -155,8 +165,7 @@ export function buildSeedBrands(): Brand[] {
       },
       merchantSetup: {
         knowsMerchantId: false,
-        merchantId: "",
-        terminals: [],
+        merchantAccounts: [],
         needsLuneContact: true,
       },
     },
@@ -180,10 +189,15 @@ export function buildSeedBrands(): Brand[] {
       },
       merchantSetup: {
         knowsMerchantId: true,
-        merchantId: "MID-7743-5502",
-        terminals: [
-          { id: "t-level-1", terminalId: "TID-04471", channel: "in_store" },
-          { id: "t-level-2", terminalId: "TID-ONLINE-08", channel: "online" },
+        merchantAccounts: [
+          {
+            id: "acc-level-1",
+            merchantId: "MID-7743-5502",
+            terminals: [
+              { id: "t-level-1", terminalId: "TID-04471", channel: "in_store", label: "Mall of the Emirates" },
+              { id: "t-level-2", terminalId: "TID-ONLINE-08", channel: "online", label: "Website" },
+            ],
+          },
         ],
         needsLuneContact: false,
       },

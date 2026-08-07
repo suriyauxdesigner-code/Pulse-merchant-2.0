@@ -18,8 +18,7 @@ export const emptyBrandProfile = (): BrandProfile => ({
 
 export const emptyMerchantSetup = (): MerchantSetup => ({
   knowsMerchantId: null,
-  merchantId: "",
-  terminals: [],
+  merchantAccounts: [],
   needsLuneContact: false,
 })
 

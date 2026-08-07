@@ -11,6 +11,13 @@ export type TerminalEntry = {
   id: string
   terminalId: string
   channel: TerminalChannel
+  label: string
+}
+
+export type MerchantAccount = {
+  id: string
+  merchantId: string
+  terminals: TerminalEntry[]
 }
 
 export type BrandProfile = {
@@ -24,8 +31,7 @@ export type BrandProfile = {
 
 export type MerchantSetup = {
   knowsMerchantId: boolean | null
-  merchantId: string
-  terminals: TerminalEntry[]
+  merchantAccounts: MerchantAccount[]
   needsLuneContact: boolean
 }
 
