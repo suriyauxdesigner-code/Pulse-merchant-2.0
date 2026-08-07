@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { CheckboxList } from "@/components/shared/checkbox-list"
 import { TagSearchInput } from "@/components/shared/tag-search-input"
+import { OptionalTagPicker } from "@/components/shared/optional-tag-picker"
 import { LogoTile } from "@/components/shared/logo-tile"
 import { FileUpload } from "@/components/shared/file-upload"
 import { ColorSwatchPicker } from "@/components/shared/color-swatch-picker"
@@ -186,17 +187,21 @@ export function BrandDetailPage() {
               )}
             </Field>
 
-            <Field label="Additional categories" editing={editing} stacked>
-              {editing ? (
-                <CheckboxList
-                  options={CATEGORY_OPTIONS}
-                  selected={form.profile.categories}
-                  onChange={(v) => setForm({ ...form, profile: { ...form.profile, categories: v } })}
-                />
-              ) : (
+            {editing ? (
+              <OptionalTagPicker
+                label="Additional categories"
+                description="Optional — turn this on to tag other categories your brand operates in."
+                suggestions={CATEGORY_OPTIONS}
+                selected={form.profile.categories}
+                onChange={(v) => setForm({ ...form, profile: { ...form.profile, categories: v } })}
+                placeholder="Search categories..."
+                suggestionsLabel="Popular categories — click to add"
+              />
+            ) : (
+              <Field label="Additional categories" editing={editing} stacked>
                 <TagRow items={brand.profile.categories} />
-              )}
-            </Field>
+              </Field>
+            )}
 
             <Separator />
 

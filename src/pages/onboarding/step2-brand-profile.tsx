@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { CheckboxList } from "@/components/shared/checkbox-list"
 import { TagSearchInput } from "@/components/shared/tag-search-input"
+import { OptionalTagPicker } from "@/components/shared/optional-tag-picker"
 import { CATEGORY_OPTIONS, KNOWN_BRANDS, SHOP_CHANNEL_OPTIONS } from "@/lib/data"
 import type { Brand, BrandProfile } from "@/lib/types"
 
@@ -51,10 +52,15 @@ export function Step2BrandProfile({
         />
       </div>
 
-      <div className="space-y-2.5">
-        <Label>Additional categories</Label>
-        <CheckboxList options={CATEGORY_OPTIONS} selected={profile.categories} onChange={(v) => patchProfile({ categories: v })} />
-      </div>
+      <OptionalTagPicker
+        label="Additional categories"
+        description="Optional — turn this on to tag other categories your brand operates in."
+        suggestions={CATEGORY_OPTIONS}
+        selected={profile.categories}
+        onChange={(v) => patchProfile({ categories: v })}
+        placeholder="Search categories..."
+        suggestionsLabel="Popular categories — click to add"
+      />
 
       <Separator />
 
@@ -103,5 +109,5 @@ export function Step2BrandProfile({
 }
 
 export function step2IsValid(draft: Partial<Brand>) {
-  return Boolean(draft.profile && draft.profile.shopChannels.length > 0 && draft.profile.categories.length > 0)
+  return Boolean(draft.profile && draft.profile.shopChannels.length > 0)
 }

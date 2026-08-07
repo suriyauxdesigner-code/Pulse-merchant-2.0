@@ -9,12 +9,14 @@ export function TagSearchInput({
   selected,
   onChange,
   placeholder = "Search...",
+  suggestionsLabel = "Popular brands — click to add",
   className,
 }: {
   suggestions: string[]
   selected: string[]
   onChange: (next: string[]) => void
   placeholder?: string
+  suggestionsLabel?: string
   className?: string
 }) {
   const [query, setQuery] = React.useState("")
@@ -122,7 +124,7 @@ export function TagSearchInput({
 
       {quickPicks.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-xs text-muted-foreground">Popular brands — click to add</p>
+          <p className="text-xs text-muted-foreground">{suggestionsLabel}</p>
           <div className="flex flex-wrap gap-1.5">
             {quickPicks.map((s) => (
               <button
