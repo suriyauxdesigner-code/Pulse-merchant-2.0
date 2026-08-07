@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import type { Brand, BrandProfile, Campaign, MerchantSetup } from "./types"
-import { BANKS, buildSeedBrands, buildSeedCampaigns } from "./data"
+import { BANKS, BRAND_COLOR_PRESETS, buildSeedBrands, buildSeedCampaigns } from "./data"
 
 function makeId(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 9)}-${Date.now().toString(36)}`
@@ -143,7 +143,7 @@ export const useAppStore = create<AppState>()(
             id,
             name: "",
             logoUrl: null,
-            logoColor: "#0E3B2E",
+            logoColor: BRAND_COLOR_PRESETS[Math.floor(Math.random() * BRAND_COLOR_PRESETS.length)],
             website: "",
             socialMedia: "",
             onboardingComplete: false,

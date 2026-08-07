@@ -3,7 +3,6 @@ import { Search, Plus, PenLine, CheckCircle2 } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { FileUpload } from "@/components/shared/file-upload"
-import { ColorSwatchPicker } from "@/components/shared/color-swatch-picker"
 import { KNOWN_BRANDS } from "@/lib/data"
 import type { Brand } from "@/lib/types"
 
@@ -94,18 +93,9 @@ export function Step1BrandInfo({
             </div>
           </div>
 
-          <div className="flex gap-6">
-            <div className="space-y-1.5">
-              <Label>Logo (optional)</Label>
-              <FileUpload value={draft.logoUrl ?? null} onChange={(v) => onUpdate({ logoUrl: v })} hint="PNG, up to 5MB" />
-            </div>
-            <div className="flex-1 space-y-1.5">
-              <Label>Brand Color</Label>
-              <p className="text-xs text-muted-foreground">Used consistently across this brand's campaign cards.</p>
-              <div className="pt-1">
-                <ColorSwatchPicker value={draft.logoColor || "#0E3B2E"} onChange={(color) => onUpdate({ logoColor: color })} />
-              </div>
-            </div>
+          <div className="space-y-1.5">
+            <Label>Logo (optional)</Label>
+            <FileUpload value={draft.logoUrl ?? null} onChange={(v) => onUpdate({ logoUrl: v })} hint="PNG, up to 5MB" />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
