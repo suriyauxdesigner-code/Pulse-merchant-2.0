@@ -1,5 +1,6 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { CheckboxList } from "@/components/shared/checkbox-list"
 import { TagSearchInput } from "@/components/shared/tag-search-input"
@@ -32,12 +33,15 @@ export function Step2BrandProfile({
         <p className="mt-1 text-sm text-muted-foreground">Help us understand your customers and business so we can match you with the right bank offers.</p>
       </div>
 
-      <div className="space-y-2.5">
-        <Label>
-          Where do your ideal customers shop? <span className="font-normal text-muted-foreground">(optional)</span>
-        </Label>
-        <p className="-mt-1.5 text-xs text-muted-foreground">
-          A suggestion to help us match you with the right bank offers — skip it if you're not sure.
+      <div className="space-y-2.5 rounded-[var(--radius)] bg-info-bg p-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <Label className="text-info-foreground">
+            Where do your ideal customers shop? <span className="font-normal text-info-foreground/70">(optional)</span>
+          </Label>
+          <Badge variant="info">New — not in current design</Badge>
+        </div>
+        <p className="text-xs text-info-foreground/80">
+          This question isn't part of the existing design — it's a proposed addition to help power targeting logic. Optional, skip it if you're not sure.
         </p>
         <CheckboxList
           options={SHOP_CHANNEL_OPTIONS}
