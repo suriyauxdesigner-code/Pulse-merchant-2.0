@@ -33,7 +33,12 @@ export function Step2BrandProfile({
       </div>
 
       <div className="space-y-2.5">
-        <Label>Where do your ideal customers shop?</Label>
+        <Label>
+          Where do your ideal customers shop? <span className="font-normal text-muted-foreground">(optional)</span>
+        </Label>
+        <p className="-mt-1.5 text-xs text-muted-foreground">
+          A suggestion to help us match you with the right bank offers — skip it if you're not sure.
+        </p>
         <CheckboxList
           options={SHOP_CHANNEL_OPTIONS}
           selected={profile.shopChannels}
@@ -109,5 +114,5 @@ export function Step2BrandProfile({
 }
 
 export function step2IsValid(draft: Partial<Brand>) {
-  return Boolean(draft.profile && draft.profile.shopChannels.length > 0)
+  return Boolean(draft.profile)
 }

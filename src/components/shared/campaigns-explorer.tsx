@@ -3,7 +3,6 @@ import type { ReactNode } from "react"
 import { Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CampaignsTable } from "@/components/shared/campaigns-table"
 import { bankById } from "@/lib/data"
@@ -39,36 +38,26 @@ export function CampaignsExplorer({ campaigns, brands }: { campaigns: Campaign[]
 
   return (
     <div>
-      <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)} className="mb-5">
-        <TabsList>
-          <TabsTrigger value="all">
-            All Campaigns
-            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground group-data-[state=active]:bg-white/20 group-data-[state=active]:text-white">
-              {campaigns.length}
-            </span>
-          </TabsTrigger>
-          <TabsTrigger value="live">
-            Live Campaigns
-            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground group-data-[state=active]:bg-white/20 group-data-[state=active]:text-white">
-              {liveCount}
-            </span>
-          </TabsTrigger>
-          <TabsTrigger value="completed">
-            Completed Campaigns
-            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground group-data-[state=active]:bg-white/20 group-data-[state=active]:text-white">
-              {completedCount}
-            </span>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-
-      <div className="mb-5 grid gap-3 sm:grid-cols-3">
+      <div className="mb-5 grid gap-3 sm:grid-cols-4">
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Campaign Name</label>
           <div className="relative">
             <Search className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search Campaign Name" className="pl-10" />
           </div>
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-muted-foreground">Status</label>
+          <Select value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Campaigns ({campaigns.length})</SelectItem>
+              <SelectItem value="live">Live Campaigns ({liveCount})</SelectItem>
+              <SelectItem value="completed">Completed Campaigns ({completedCount})</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-muted-foreground">Brand</label>

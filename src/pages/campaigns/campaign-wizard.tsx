@@ -74,10 +74,7 @@ export function CampaignWizardPage() {
           "{draft.name}" is now live and appears on your Campaign page.
         </p>
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-          <Button variant="outline" onClick={() => navigate("/")}>
-            Go to Dashboard
-          </Button>
-          <Button onClick={() => navigate(`/campaigns/${submittedId}`)}>View Campaign</Button>
+          <Button onClick={() => navigate("/")}>Go to Dashboard</Button>
         </div>
       </div>
     )

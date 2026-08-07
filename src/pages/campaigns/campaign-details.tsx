@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { ArrowLeft, Calendar, Wallet, Percent, ShieldCheck, Sparkles, Receipt, TrendingUp } from "lucide-react"
+import { ArrowLeft, Calendar, Wallet, Percent, ShieldCheck, Sparkles, Receipt } from "lucide-react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -83,7 +83,7 @@ export function CampaignDetailsPage() {
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="space-y-5">
           {isLive || isCompleted ? (
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <MetricCard
                 icon={<Receipt className="size-[18px]" />}
                 label="Transactions"
@@ -93,12 +93,6 @@ export function CampaignDetailsPage() {
                 icon={<Wallet className="size-[18px]" />}
                 label="Cashback given"
                 value={`AED ${campaign.spent.toLocaleString()}`}
-              />
-              <MetricCard
-                icon={<TrendingUp className="size-[18px]" />}
-                label="Estimated ROI"
-                value={`${(3.1 + campaign.cashbackPercent / 10).toFixed(1)}x`}
-                accent="success"
               />
             </div>
           ) : (

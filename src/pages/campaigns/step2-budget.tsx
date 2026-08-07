@@ -59,6 +59,55 @@ export function Step2Budget({
         )}
       </div>
 
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label>Cashback Percentage</Label>
+          <span className="text-lg font-bold text-foreground">{draft.cashbackPercent}%</span>
+        </div>
+        <Slider
+          min={1}
+          max={30}
+          step={1}
+          value={[draft.cashbackPercent]}
+          onValueChange={([v]) => onUpdate({ cashbackPercent: v })}
+        />
+        <FieldHint>The percentage of each purchase a shopper gets back as cashback. Higher rates attract more attention from bank partners.</FieldHint>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="cap">Cashback Cap</Label>
+          <div className="relative">
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">AED</span>
+            <Input
+              id="cap"
+              type="number"
+              className="pl-12"
+              value={draft.cashbackCap ?? ""}
+              onChange={(e) => onUpdate({ cashbackCap: Number(e.target.value) || null })}
+              placeholder="200"
+            />
+          </div>
+          <FieldHint>The maximum cashback amount a single customer can earn per transaction.</FieldHint>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="min-spend">Minimum Spend (optional)</Label>
+          <div className="relative">
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">AED</span>
+            <Input
+              id="min-spend"
+              type="number"
+              className="pl-12"
+              value={draft.minSpend ?? ""}
+              onChange={(e) => onUpdate({ minSpend: e.target.value ? Number(e.target.value) : null })}
+              placeholder="No minimum"
+            />
+          </div>
+          <FieldHint>Customers must spend at least this amount for a purchase to qualify for cashback.</FieldHint>
+        </div>
+      </div>
+
       <Separator />
 
       <div className="space-y-3">
@@ -110,7 +159,7 @@ export function Step2Budget({
         </div>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         <div className="space-y-1.5">
           <Label htmlFor="start-date">Start Date</Label>
           <Input id="start-date" type="date" value={draft.startDate} onChange={(e) => onUpdate({ startDate: e.target.value })} />
@@ -130,43 +179,7 @@ export function Step2Budget({
             </div>
           </div>
         )}
-      </div>
-
-      <Separator />
-
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <Label>Cashback Percentage</Label>
-          <span className="text-lg font-bold text-foreground">{draft.cashbackPercent}%</span>
-        </div>
-        <Slider
-          min={1}
-          max={30}
-          step={1}
-          value={[draft.cashbackPercent]}
-          onValueChange={([v]) => onUpdate({ cashbackPercent: v })}
-        />
-        <FieldHint>The percentage of each purchase a shopper gets back as cashback. Higher rates attract more attention from bank partners.</FieldHint>
-      </div>
-
-      <div className="grid gap-6 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="cap">Cashback Cap</Label>
-          <div className="relative">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">AED</span>
-            <Input
-              id="cap"
-              type="number"
-              className="pl-12"
-              value={draft.cashbackCap ?? ""}
-              onChange={(e) => onUpdate({ cashbackCap: Number(e.target.value) || null })}
-              placeholder="200"
-            />
-          </div>
-          <FieldHint>The maximum cashback amount a single customer can earn per transaction.</FieldHint>
-        </div>
-
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <Label htmlFor="hold">Hold Period</Label>
           <Select value={String(draft.holdPeriodDays)} onValueChange={(v) => onUpdate({ holdPeriodDays: Number(v) })}>
             <SelectTrigger id="hold">
@@ -180,25 +193,9 @@ export function Step2Budget({
               ))}
             </SelectContent>
           </Select>
-          <FieldHint>Time before cashback is settled — protects against returns, cancellations and fraud.</FieldHint>
         </div>
       </div>
-
-      <div className="space-y-2 sm:w-1/2 sm:pr-3">
-        <Label htmlFor="min-spend">Minimum Spend (optional)</Label>
-        <div className="relative">
-          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">AED</span>
-          <Input
-            id="min-spend"
-            type="number"
-            className="pl-12"
-            value={draft.minSpend ?? ""}
-            onChange={(e) => onUpdate({ minSpend: e.target.value ? Number(e.target.value) : null })}
-            placeholder="No minimum"
-          />
-        </div>
-        <FieldHint>Customers must spend at least this amount for a purchase to qualify for cashback.</FieldHint>
-      </div>
+      <FieldHint>Hold period is the time before cashback is settled — protects against returns, cancellations and fraud.</FieldHint>
     </div>
   )
 }

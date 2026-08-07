@@ -13,6 +13,13 @@ export const BANKS: Bank[] = [
 
 export const bankById = (id: string | null | undefined) => BANKS.find((b) => b.id === id)
 
+// A neutral placeholder logo (colored square + abstract mark) for brands that haven't
+// uploaded their own — every brand should render an actual logo image, not just initials.
+export function defaultLogo(color: string) {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='10' fill='${color}'/><circle cx='20' cy='20' r='9' fill='white' fill-opacity='0.95'/></svg>`
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+}
+
 export const SHOP_CHANNEL_OPTIONS = [
   "Malls & shopping centers",
   "High street / standalone stores",
@@ -54,7 +61,7 @@ export const CAMPAIGN_GOALS: { value: string; label: string; description: string
   { value: "loyalty", label: "Reward Loyal Customers", description: "Increase repeat purchases and retention" },
 ]
 
-export const BUDGET_STEPS = [1000, 5000, 10000, 20000, 30000, 50000, 75000, 100000]
+export const BUDGET_STEPS = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000]
 
 export function nearestBudgetStep(value: number) {
   return BUDGET_STEPS.reduce((closest, step) => (Math.abs(step - value) < Math.abs(closest - value) ? step : closest), BUDGET_STEPS[0])
@@ -84,7 +91,7 @@ export function buildSeedBrands(): Brand[] {
     {
       id: "brand-faces",
       name: "Faces",
-      logoUrl: null,
+      logoUrl: defaultLogo("#0E3B2E"),
       logoColor: "#0E3B2E",
       website: "https://faces.com",
       socialMedia: "@facesbeauty",
@@ -124,7 +131,7 @@ export function buildSeedBrands(): Brand[] {
     {
       id: "brand-tryano",
       name: "Tryano",
-      logoUrl: null,
+      logoUrl: defaultLogo("#8A1538"),
       logoColor: "#8A1538",
       website: "https://tryano.com",
       socialMedia: "@tryano",
@@ -155,7 +162,7 @@ export function buildSeedBrands(): Brand[] {
     {
       id: "brand-tanagra",
       name: "Tanagra",
-      logoUrl: null,
+      logoUrl: defaultLogo("#1E2A5E"),
       logoColor: "#1E2A5E",
       website: "https://tanagra.com",
       socialMedia: "@tanagra.uae",
@@ -179,7 +186,7 @@ export function buildSeedBrands(): Brand[] {
     {
       id: "brand-level",
       name: "LEVEL Shoes",
-      logoUrl: null,
+      logoUrl: defaultLogo("#111827"),
       logoColor: "#111827",
       website: "https://levelshoes.com",
       socialMedia: "@levelshoes",

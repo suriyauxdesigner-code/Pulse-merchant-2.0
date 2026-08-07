@@ -8,27 +8,28 @@ function formatBudget(value: number) {
 }
 
 export function BudgetSlider({ value, onChange }: { value: number; onChange: (v: number) => void }) {
-  const index = Math.max(0, BUDGET_STEPS.indexOf(value))
+  const min = BUDGET_STEPS[0]
+  const max = BUDGET_STEPS[BUDGET_STEPS.length - 1]
 
   return (
     <div>
       <Slider
-        min={0}
-        max={BUDGET_STEPS.length - 1}
-        step={1}
-        value={[index]}
-        onValueChange={([i]) => onChange(BUDGET_STEPS[i])}
+        min={min}
+        max={max}
+        step={1000}
+        value={[value]}
+        onValueChange={([v]) => onChange(v)}
         className="mb-4"
       />
       <div className="flex justify-between">
-        {BUDGET_STEPS.map((step, i) => (
+        {BUDGET_STEPS.map((step) => (
           <button
             key={step}
             type="button"
             onClick={() => onChange(step)}
             className={cn(
               "text-xs font-medium transition-colors",
-              i === index ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground"
+              value === step ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground"
             )}
           >
             AED {formatBudget(step)}

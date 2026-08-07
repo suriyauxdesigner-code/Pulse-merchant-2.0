@@ -26,7 +26,7 @@ export function emptyCampaignDraft(brandId = ""): CampaignDraft {
     brandId,
     name: "",
     goal: "",
-    budget: 10000,
+    budget: 50000,
     budgetUtilization: "duration",
     startDate: today(),
     durationDays: 30,

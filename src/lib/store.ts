@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import type { Brand, BrandProfile, Campaign, MerchantSetup } from "./types"
-import { BANKS, BRAND_COLOR_PRESETS, buildSeedBrands, buildSeedCampaigns } from "./data"
+import { BANKS, BRAND_COLOR_PRESETS, buildSeedBrands, buildSeedCampaigns, defaultLogo } from "./data"
 
 function makeId(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 9)}-${Date.now().toString(36)}`
@@ -171,11 +171,12 @@ export const useAppStore = create<AppState>()(
       completeBrandOnboarding: (id) => {
         const draft = get().draftBrand
         if (!draft || draft.id !== id) return
+        const logoColor = draft.logoColor || "#0E3B2E"
         const brand: Brand = {
           id: draft.id!,
           name: draft.name || "Untitled Brand",
-          logoUrl: draft.logoUrl ?? null,
-          logoColor: draft.logoColor || "#0E3B2E",
+          logoUrl: draft.logoUrl ?? defaultLogo(logoColor),
+          logoColor,
           website: draft.website || "",
           socialMedia: draft.socialMedia || "",
           onboardingComplete: true,
