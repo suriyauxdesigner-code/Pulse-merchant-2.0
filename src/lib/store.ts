@@ -7,6 +7,53 @@ function makeId(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 9)}-${Date.now().toString(36)}`
 }
 
+// Older persisted state stored a single { merchantId, terminals } pair instead of
+// merchantAccounts, and terminals had no label field. Repair it in place so brands
+// saved before this shape existed don't crash the app on load.
+function migrateMerchantSetup(raw: any): MerchantSetup {
+  if (!raw) return emptyMerchantSetup()
+  if (Array.isArray(raw.merchantAccounts)) {
+    return {
+      knowsMerchantId: raw.knowsMerchantId ?? null,
+      needsLuneContact: raw.needsLuneContact ?? false,
+      merchantAccounts: raw.merchantAccounts.map((a: any) => ({
+        id: a.id || makeId("acc"),
+        merchantId: a.merchantId || "",
+        terminals: (a.terminals || []).map((t: any) => ({
+          id: t.id || makeId("term"),
+          terminalId: t.terminalId || "",
+          channel: t.channel || "in_store",
+          label: t.label || "",
+        })),
+      })),
+    }
+  }
+  const legacyTerminals = raw.terminals || []
+  const hasLegacyAccount = Boolean(raw.merchantId) || legacyTerminals.length > 0
+  return {
+    knowsMerchantId: raw.knowsMerchantId ?? null,
+    needsLuneContact: raw.needsLuneContact ?? false,
+    merchantAccounts: hasLegacyAccount
+      ? [
+          {
+            id: makeId("acc"),
+            merchantId: raw.merchantId || "",
+            terminals: legacyTerminals.map((t: any) => ({
+              id: t.id || makeId("term"),
+              terminalId: t.terminalId || "",
+              channel: t.channel || "in_store",
+              label: t.label || "",
+            })),
+          },
+        ]
+      : [],
+  }
+}
+
+function migrateBrand(raw: any): Brand {
+  return { ...raw, merchantSetup: migrateMerchantSetup(raw?.merchantSetup) }
+}
+
 export const emptyBrandProfile = (): BrandProfile => ({
   shopChannels: [],
   competitors: [],
@@ -165,6 +212,17 @@ export const useAppStore = create<AppState>()(
       resetDemoData: () => set({ brands: buildSeedBrands(), campaigns: buildSeedCampaigns(), draftBrand: null }),
       clearAllData: () => set({ brands: [], campaigns: [], draftBrand: null }),
     }),
-    { name: "lune-merchant-app" }
+    {
+      name: "lune-merchant-app",
+      version: 1,
+      migrate: (persistedState) => {
+        const state = (persistedState as Partial<AppState>) || {}
+        return {
+          ...state,
+          brands: (state.brands || []).map(migrateBrand),
+          draftBrand: state.draftBrand ? migrateBrand(state.draftBrand as Brand) : null,
+        }
+      },
+    }
   )
 )
