@@ -85,10 +85,13 @@ export const emptyMerchantSetup = (): MerchantSetup => ({
   needsLuneContact: false,
 })
 
+type AuthUser = { name: string; email: string; company: string; website: string }
+
 type AuthState = {
-  user: { name: string; email: string; company: string } | null
+  user: AuthUser | null
   login: (email: string) => void
   logout: () => void
+  updateProfile: (patch: Partial<Pick<AuthUser, "company" | "website">>) => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -101,6 +104,7 @@ export const useAuthStore = create<AuthState>()(
             name: email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) || "Merchant",
             email,
             company: "Carrefour",
+            website: "https://www.carrefour.com",
           },
         }),
       logout: () => {
@@ -108,6 +112,7 @@ export const useAuthStore = create<AuthState>()(
         // Every session starts fresh — the next login should see the empty state again.
         useAppStore.getState().clearAllData()
       },
+      updateProfile: (patch) => set((s) => (s.user ? { user: { ...s.user, ...patch } } : s)),
     }),
     { name: "lune-merchant-auth" }
   )
@@ -129,7 +134,6 @@ type AppState = {
   advanceCampaignStatus: (id: string) => void
   getCampaignsForBrand: (brandId: string) => Campaign[]
 
-  resetDemoData: () => void
   clearAllData: () => void
 }
 
@@ -226,7 +230,6 @@ export const useAppStore = create<AppState>()(
 
       getCampaignsForBrand: (brandId) => get().campaigns.filter((c) => c.brandId === brandId),
 
-      resetDemoData: () => set({ brands: buildSeedBrands(), campaigns: buildSeedCampaigns(), draftBrand: null }),
       clearAllData: () => set({ brands: [], campaigns: [], draftBrand: null }),
     }),
     {

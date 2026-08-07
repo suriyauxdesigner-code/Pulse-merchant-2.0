@@ -5,6 +5,14 @@ export type Bank = {
   color: string
 }
 
+export type TeamMember = {
+  id: string
+  email: string
+  role: string
+  createdAt: string
+  updatedAt: string
+}
+
 export type TerminalChannel = "in_store" | "online"
 
 export type TerminalEntry = {

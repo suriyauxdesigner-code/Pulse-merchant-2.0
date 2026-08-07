@@ -1,4 +1,4 @@
-import type { Bank, Brand, Campaign, TerminalChannel } from "./types"
+import type { Bank, Brand, Campaign, TeamMember, TerminalChannel } from "./types"
 
 export const BANKS: Bank[] = [
   { id: "dib", name: "Dubai Islamic Bank", shortName: "DIB", color: "#0B5D3B" },
@@ -12,6 +12,25 @@ export const BANKS: Bank[] = [
 ]
 
 export const bankById = (id: string | null | undefined) => BANKS.find((b) => b.id === id)
+
+const TEAM_MEMBER_NAMES = [
+  "alice", "bob", "carol", "dave", "eve", "frank", "grace", "henry",
+  "irene", "jack", "kate", "liam", "mia", "noah", "olivia", "peter",
+  "quinn", "rachel", "sam", "tina", "uma", "victor", "wendy", "xander",
+]
+
+export function buildTeamMembers(): TeamMember[] {
+  return TEAM_MEMBER_NAMES.map((name, i) => {
+    const date = new Date(2026, 0, 20 + i).toISOString()
+    return {
+      id: `member-${name}`,
+      email: `${name}@chalhoub.com`,
+      role: "Merchant",
+      createdAt: date,
+      updatedAt: date,
+    }
+  })
+}
 
 // A neutral placeholder logo (colored square + abstract mark) for brands that haven't
 // uploaded their own — every brand should render an actual logo image, not just initials.
