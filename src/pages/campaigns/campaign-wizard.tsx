@@ -71,7 +71,7 @@ export function CampaignWizardPage() {
         </div>
         <h1 className="text-2xl font-bold text-foreground">Campaign submitted!</h1>
         <p className="mt-2 text-[15px] text-muted-foreground">
-          "{draft.name}" has been submitted for review. We'll match it with a bank partner and notify you as it progresses. It'll show up on your Overview page once it's live.
+          "{draft.name}" has been submitted for review. We'll match it with a bank partner and notify you as it progresses. It'll show up on your Campaign page once it's live.
         </p>
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
           <Button variant="outline" onClick={() => navigate("/")}>

@@ -70,8 +70,8 @@ type AppState = {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      brands: buildSeedBrands(),
-      campaigns: buildSeedCampaigns(),
+      brands: [],
+      campaigns: [],
       draftBrand: null,
 
       startNewBrandDraft: () => {
@@ -118,7 +118,14 @@ export const useAppStore = create<AppState>()(
           profile: draft.profile || emptyBrandProfile(),
           merchantSetup: draft.merchantSetup || emptyMerchantSetup(),
         }
-        set((s) => ({ brands: [brand, ...s.brands], draftBrand: null }))
+        set((s) => {
+          const isFirstBrand = s.brands.length === 0
+          return {
+            brands: isFirstBrand ? [brand, ...buildSeedBrands()] : [brand, ...s.brands],
+            campaigns: isFirstBrand ? buildSeedCampaigns() : s.campaigns,
+            draftBrand: null,
+          }
+        })
       },
 
       updateBrand: (id, patch) =>

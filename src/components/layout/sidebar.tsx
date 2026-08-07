@@ -20,7 +20,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 const NAV_ITEMS = [
-  { to: "/", label: "Overview", icon: LayoutGrid, end: true },
+  { to: "/", label: "Campaign", icon: LayoutGrid, end: true },
   { to: "/brands", label: "Brands", icon: Store },
   { to: "/invoices", label: "Invoice", icon: FileText },
   { to: "/settings", label: "Settings", icon: Settings },

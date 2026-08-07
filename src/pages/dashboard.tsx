@@ -23,12 +23,12 @@ export function DashboardPage() {
         <PageHeader title={`Hello ${user?.company || "there"}`} description="Track your live campaigns and offer performance" />
         <EmptyState
           icon={<Store className="size-6" />}
-          title="Onboard your first brand to get started"
-          description="Before you can launch a campaign, tell us about your brand — this only takes a few minutes and happens just once per brand."
+          title="Add a brand to set up your first campaign"
+          description="Your dashboard is empty until you onboard a brand — it only takes a few minutes and happens just once per brand."
           action={
             <Button size="lg" onClick={() => navigate("/onboarding")}>
               <Plus className="size-4" />
-              Onboard your first brand
+              Onboard a Brand
             </Button>
           }
         />
@@ -42,16 +42,10 @@ export function DashboardPage() {
         title={`Hello ${user?.company || "there"}`}
         description="Track your live campaigns and offer performance"
         actions={
-          <>
-            <Button variant="outline" onClick={() => navigate("/onboarding")}>
-              <Store className="size-4" />
-              Onboard Brand
-            </Button>
-            <Button onClick={() => navigate("/campaigns/new")}>
-              <Plus className="size-4" />
-              Create Campaign
-            </Button>
-          </>
+          <Button onClick={() => navigate("/campaigns/new")}>
+            <Plus className="size-4" />
+            Create Campaign
+          </Button>
         }
       />
 
@@ -94,13 +88,6 @@ export function DashboardPage() {
               </Card>
             )
           })}
-          <button
-            onClick={() => navigate("/onboarding")}
-            className="flex min-h-[86px] flex-col items-center justify-center gap-1.5 rounded-[var(--radius)] border-2 border-dashed border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-          >
-            <Plus className="size-5" />
-            <span className="text-sm font-medium">Onboard new brand</span>
-          </button>
         </div>
       </div>
 

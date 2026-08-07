@@ -34,7 +34,7 @@ export function CampaignDetailsPage() {
       <div className="flex flex-col items-center gap-3 py-16 text-center">
         <p className="text-muted-foreground">This campaign could not be found.</p>
         <Button variant="outline" onClick={() => navigate("/")}>
-          Back to Overview
+          Back to Campaign
         </Button>
       </div>
     )
@@ -57,7 +57,7 @@ export function CampaignDetailsPage() {
     <div className="mx-auto max-w-4xl">
       <Link to="/" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground">
         <ArrowLeft className="size-3.5" />
-        Back to Overview
+        Back to Campaign
       </Link>
 
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
