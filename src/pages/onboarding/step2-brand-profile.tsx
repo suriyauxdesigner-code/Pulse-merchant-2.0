@@ -50,29 +50,6 @@ export function Step2BrandProfile({
         />
       </div>
 
-      <div className="space-y-2.5">
-        <Label>Competitor brands</Label>
-        <p className="text-xs text-muted-foreground -mt-1.5">Search for brands you compete with, or add your own.</p>
-        <TagSearchInput
-          suggestions={KNOWN_BRANDS}
-          selected={profile.competitors}
-          onChange={(v) => patchProfile({ competitors: v })}
-          placeholder="Search competitor brands..."
-        />
-      </div>
-
-      <OptionalTagPicker
-        label="Additional categories"
-        description="Optional — turn this on to tag other categories your brand operates in."
-        suggestions={CATEGORY_OPTIONS}
-        selected={profile.categories}
-        onChange={(v) => patchProfile({ categories: v })}
-        placeholder="Search categories..."
-        suggestionsLabel="Popular categories — click to add"
-      />
-
-      <Separator />
-
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="space-y-1.5">
           <Label htmlFor="aov">Average Order Value</Label>
@@ -113,6 +90,29 @@ export function Step2BrandProfile({
           </div>
         </div>
       </div>
+
+      <Separator />
+
+      <div className="space-y-2.5">
+        <Label>Competitor brands</Label>
+        <p className="text-xs text-muted-foreground -mt-1.5">Search for brands you compete with, or add your own.</p>
+        <TagSearchInput
+          suggestions={KNOWN_BRANDS}
+          selected={profile.competitors}
+          onChange={(v) => patchProfile({ competitors: v })}
+          placeholder="Search competitor brands..."
+        />
+      </div>
+
+      <OptionalTagPicker
+        label="Additional categories"
+        description="Optional — turn this on to tag other categories your brand operates in."
+        suggestions={CATEGORY_OPTIONS}
+        selected={profile.categories}
+        onChange={(v) => patchProfile({ categories: v })}
+        placeholder="Search categories..."
+        suggestionsLabel="Popular categories — click to add"
+      />
     </div>
   )
 }

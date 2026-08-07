@@ -1,11 +1,14 @@
+import * as React from "react"
 import type { ReactNode } from "react"
 import { ArrowLeft, Calendar, Wallet, Percent, ShieldCheck, Sparkles, Receipt } from "lucide-react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { StatusBadge } from "@/components/shared/status-badge"
 import { LogoTile } from "@/components/shared/logo-tile"
+import { MobileOfferCard } from "@/components/shared/mobile-offer-card"
 import { MobileOfferDetailPreview } from "@/components/shared/mobile-offer-detail-preview"
 import { CAMPAIGN_GOALS, bankById } from "@/lib/data"
 import { useAppStore } from "@/lib/store"
@@ -28,6 +31,7 @@ export function CampaignDetailsPage() {
   const { campaigns, brands, advanceCampaignStatus } = useAppStore()
   const campaign = campaigns.find((c) => c.id === campaignId)
   const brand = brands.find((b) => b.id === campaign?.brandId)
+  const [previewMode, setPreviewMode] = React.useState<"list" | "detail">("detail")
 
   if (!campaign) {
     return (
@@ -168,25 +172,43 @@ export function CampaignDetailsPage() {
         </div>
 
         <div>
-          <p className="mb-3 text-sm font-medium text-muted-foreground">What shoppers see</p>
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <p className="text-sm font-medium text-muted-foreground">What shoppers see</p>
+            <Tabs value={previewMode} onValueChange={(v) => setPreviewMode(v as "list" | "detail")}>
+              <TabsList>
+                <TabsTrigger value="list">List</TabsTrigger>
+                <TabsTrigger value="detail">Detail</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
           <div className="rounded-[var(--radius)] border border-dashed border-border bg-muted/30 p-4">
-            <MobileOfferDetailPreview
-              campaignName={campaign.name}
-              brandName={brand?.name || "Brand"}
-              logoUrl={campaign.logoUrl ?? brand?.logoUrl ?? null}
-              bannerUrl={campaign.bannerUrl}
-              primaryColor={campaign.primaryColor}
-              cashbackPercent={campaign.cashbackPercent}
-              description={campaign.description}
-              cashbackCap={campaign.cashbackCap}
-              minSpend={campaign.minSpend}
-              holdPeriodDays={campaign.holdPeriodDays}
-              validityLabel={
-                campaign.budgetUtilization === "exhaust"
-                  ? `from ${formatShortDate(campaign.startDate)} while budget lasts`
-                  : `${formatShortDate(campaign.startDate)} – ${formatShortDate(campaign.endDate)}`
-              }
-            />
+            {previewMode === "list" ? (
+              <MobileOfferCard
+                brandName={brand?.name || "Brand"}
+                logoUrl={campaign.logoUrl ?? brand?.logoUrl ?? null}
+                bannerUrl={campaign.bannerUrl}
+                primaryColor={campaign.primaryColor}
+                cashbackPercent={campaign.cashbackPercent}
+              />
+            ) : (
+              <MobileOfferDetailPreview
+                campaignName={campaign.name}
+                brandName={brand?.name || "Brand"}
+                logoUrl={campaign.logoUrl ?? brand?.logoUrl ?? null}
+                bannerUrl={campaign.bannerUrl}
+                primaryColor={campaign.primaryColor}
+                cashbackPercent={campaign.cashbackPercent}
+                description={campaign.description}
+                cashbackCap={campaign.cashbackCap}
+                minSpend={campaign.minSpend}
+                holdPeriodDays={campaign.holdPeriodDays}
+                validityLabel={
+                  campaign.budgetUtilization === "exhaust"
+                    ? `from ${formatShortDate(campaign.startDate)} while budget lasts`
+                    : `${formatShortDate(campaign.startDate)} – ${formatShortDate(campaign.endDate)}`
+                }
+              />
+            )}
           </div>
         </div>
       </div>

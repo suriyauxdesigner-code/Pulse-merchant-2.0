@@ -48,7 +48,16 @@ export function Step2Budget({
 
       <div className="rounded-[var(--radius)] border border-border bg-muted/40 p-6">
         <p className="mb-1 text-center text-sm font-medium text-muted-foreground">Total Budget</p>
-        <p className="mb-6 text-center text-4xl font-bold text-foreground">AED {draft.budget.toLocaleString()}</p>
+        <div className="mb-6 flex items-center justify-center gap-2">
+          <span className="text-3xl font-bold text-muted-foreground">AED</span>
+          <Input
+            type="number"
+            min={0}
+            value={draft.budget}
+            onChange={(e) => onUpdate({ budget: Math.max(0, Number(e.target.value) || 0) })}
+            className="h-auto w-[180px] border-0 bg-transparent p-0 text-center text-4xl font-bold text-foreground shadow-none focus-visible:ring-0"
+          />
+        </div>
         <BudgetSlider value={draft.budget} onChange={(v) => onUpdate({ budget: v })} />
         {suggestedBudget && (
           <p className="mt-4 flex items-start gap-1.5 text-xs text-muted-foreground">
