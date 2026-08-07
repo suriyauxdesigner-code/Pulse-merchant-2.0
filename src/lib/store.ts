@@ -103,7 +103,11 @@ export const useAuthStore = create<AuthState>()(
             company: "Carrefour",
           },
         }),
-      logout: () => set({ user: null }),
+      logout: () => {
+        set({ user: null })
+        // Every session starts fresh — the next login should see the empty state again.
+        useAppStore.getState().clearAllData()
+      },
     }),
     { name: "lune-merchant-auth" }
   )
