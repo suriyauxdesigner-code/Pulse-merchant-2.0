@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { TagSearchInput } from "@/components/shared/tag-search-input"
 import { TERMINAL_CHANNEL_OPTIONS } from "@/lib/data"
 import type { MerchantAccount, MerchantSetup, TerminalChannel, TerminalEntry } from "@/lib/types"
 
@@ -11,11 +12,11 @@ function makeId(prefix: string) {
 }
 
 export function makeEmptyTerminal(): TerminalEntry {
-  return { id: makeId("term"), terminalId: "", channel: "in_store", label: "" }
+  return { id: makeId("term"), terminalId: "", channel: "in_store" }
 }
 
 export function makeEmptyMerchantAccount(): MerchantAccount {
-  return { id: makeId("acc"), merchantId: "", terminals: [makeEmptyTerminal()] }
+  return { id: makeId("acc"), merchantId: "", labels: [], terminals: [makeEmptyTerminal()] }
 }
 
 export function MerchantSetupFields({
@@ -83,52 +84,57 @@ export function MerchantSetupFields({
             placeholder="e.g. MID-7743-2210"
           />
 
+          <div className="space-y-2">
+            <Label>Labels</Label>
+            <p className="-mt-1 text-xs text-muted-foreground">
+              Tag this Merchant ID so you can find it later — city, branch name, anything memorable. Add as many as you like.
+            </p>
+            <TagSearchInput
+              suggestions={[]}
+              selected={account.labels}
+              onChange={(v) => updateAccount(account.id, { labels: v })}
+              placeholder="Type a label and press Enter — e.g. Bangalore, Koramangala"
+            />
+          </div>
+
           <div className="space-y-2.5">
             <Label>Terminal IDs</Label>
             <p className="-mt-1 text-xs text-muted-foreground">
-              Add every terminal under this Merchant ID, the channel it's used for, and an optional label — a
-              location, a purpose, anything that'll help you tell it apart later.
+              Add every terminal under this Merchant ID and the channel it's used for.
             </p>
 
             {account.terminals.length > 0 && (
               <div className="space-y-2.5">
                 {account.terminals.map((terminal) => (
-                  <div key={terminal.id} className="space-y-2 rounded-[var(--radius-sm)] border border-border/70 bg-muted/20 p-3">
-                    <div className="flex items-start gap-2.5">
-                      <Input
-                        value={terminal.terminalId}
-                        onChange={(e) => updateTerminal(account.id, terminal.id, { terminalId: e.target.value })}
-                        placeholder="e.g. TID-00921"
-                        className="flex-1"
-                      />
-                      <Select
-                        value={terminal.channel}
-                        onValueChange={(v) => updateTerminal(account.id, terminal.id, { channel: v as TerminalChannel })}
-                      >
-                        <SelectTrigger className="w-[190px] shrink-0">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {TERMINAL_CHANNEL_OPTIONS.map((opt) => (
-                            <SelectItem key={opt.value} value={opt.value}>
-                              {opt.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <button
-                        type="button"
-                        onClick={() => removeTerminal(account.id, terminal.id)}
-                        className="flex size-10 shrink-0 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground hover:bg-muted hover:text-destructive"
-                      >
-                        <X className="size-4" />
-                      </button>
-                    </div>
+                  <div key={terminal.id} className="flex items-start gap-2.5">
                     <Input
-                      value={terminal.label}
-                      onChange={(e) => updateTerminal(account.id, terminal.id, { label: e.target.value })}
-                      placeholder="Label this terminal — e.g. Downtown Mall, Warehouse (optional)"
+                      value={terminal.terminalId}
+                      onChange={(e) => updateTerminal(account.id, terminal.id, { terminalId: e.target.value })}
+                      placeholder="e.g. TID-00921"
+                      className="flex-1"
                     />
+                    <Select
+                      value={terminal.channel}
+                      onValueChange={(v) => updateTerminal(account.id, terminal.id, { channel: v as TerminalChannel })}
+                    >
+                      <SelectTrigger className="w-[190px] shrink-0">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {TERMINAL_CHANNEL_OPTIONS.map((opt) => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <button
+                      type="button"
+                      onClick={() => removeTerminal(account.id, terminal.id)}
+                      className="flex size-10 shrink-0 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground hover:bg-muted hover:text-destructive"
+                    >
+                      <X className="size-4" />
+                    </button>
                   </div>
                 ))}
               </div>

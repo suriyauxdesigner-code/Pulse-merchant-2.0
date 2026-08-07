@@ -8,10 +8,21 @@ function makeId(prefix: string) {
 }
 
 // Older persisted state stored a single { merchantId, terminals } pair instead of
-// merchantAccounts, and terminals had no label field. Repair it in place so brands
-// saved before this shape existed don't crash the app on load.
+// merchantAccounts, and an even older shape put a free-text label on each terminal
+// instead of on the account. Repair both in place so brands saved before this shape
+// existed don't crash the app on load; any per-terminal labels get folded up into
+// the account's labels list.
 function migrateMerchantSetup(raw: any): MerchantSetup {
   if (!raw) return emptyMerchantSetup()
+  const cleanTerminals = (terminals: any[]) =>
+    (terminals || []).map((t: any) => ({
+      id: t.id || makeId("term"),
+      terminalId: t.terminalId || "",
+      channel: t.channel || "in_store",
+    }))
+  const terminalLabels = (terminals: any[]) =>
+    (terminals || []).map((t: any) => t.label).filter((l: any) => typeof l === "string" && l.trim().length > 0)
+
   if (Array.isArray(raw.merchantAccounts)) {
     return {
       knowsMerchantId: raw.knowsMerchantId ?? null,
@@ -19,12 +30,8 @@ function migrateMerchantSetup(raw: any): MerchantSetup {
       merchantAccounts: raw.merchantAccounts.map((a: any) => ({
         id: a.id || makeId("acc"),
         merchantId: a.merchantId || "",
-        terminals: (a.terminals || []).map((t: any) => ({
-          id: t.id || makeId("term"),
-          terminalId: t.terminalId || "",
-          channel: t.channel || "in_store",
-          label: t.label || "",
-        })),
+        labels: Array.isArray(a.labels) && a.labels.length > 0 ? a.labels : Array.from(new Set(terminalLabels(a.terminals))),
+        terminals: cleanTerminals(a.terminals),
       })),
     }
   }
@@ -38,12 +45,8 @@ function migrateMerchantSetup(raw: any): MerchantSetup {
           {
             id: makeId("acc"),
             merchantId: raw.merchantId || "",
-            terminals: legacyTerminals.map((t: any) => ({
-              id: t.id || makeId("term"),
-              terminalId: t.terminalId || "",
-              channel: t.channel || "in_store",
-              label: t.label || "",
-            })),
+            labels: Array.from(new Set(terminalLabels(legacyTerminals))),
+            terminals: cleanTerminals(legacyTerminals),
           },
         ]
       : [],
@@ -214,7 +217,7 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "lune-merchant-app",
-      version: 1,
+      version: 2,
       migrate: (persistedState) => {
         const state = (persistedState as Partial<AppState>) || {}
         return {

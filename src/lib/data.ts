@@ -105,10 +105,16 @@ export function buildSeedBrands(): Brand[] {
           {
             id: "acc-faces-1",
             merchantId: "MID-7743-2210",
+            labels: ["Mall of the Emirates", "Dubai"],
+            terminals: [{ id: "t-faces-1", terminalId: "TID-00921", channel: "in_store" }],
+          },
+          {
+            id: "acc-faces-2",
+            merchantId: "MID-7743-2211",
+            labels: ["Dubai Mall", "Dubai"],
             terminals: [
-              { id: "t-faces-1", terminalId: "TID-00921", channel: "in_store", label: "Mall of the Emirates" },
-              { id: "t-faces-2", terminalId: "TID-00922", channel: "in_store", label: "Dubai Mall" },
-              { id: "t-faces-3", terminalId: "TID-ONLINE-14", channel: "online", label: "Website" },
+              { id: "t-faces-2", terminalId: "TID-00922", channel: "in_store" },
+              { id: "t-faces-3", terminalId: "TID-ONLINE-14", channel: "online" },
             ],
           },
         ],
@@ -139,7 +145,8 @@ export function buildSeedBrands(): Brand[] {
           {
             id: "acc-tryano-1",
             merchantId: "MID-7743-3381",
-            terminals: [{ id: "t-tryano-1", terminalId: "TID-00921", channel: "in_store", label: "Dubai Mall" }],
+            labels: ["Dubai Mall"],
+            terminals: [{ id: "t-tryano-1", terminalId: "TID-00921", channel: "in_store" }],
           },
         ],
         needsLuneContact: false,
@@ -193,9 +200,10 @@ export function buildSeedBrands(): Brand[] {
           {
             id: "acc-level-1",
             merchantId: "MID-7743-5502",
+            labels: ["Mall of the Emirates", "Dubai"],
             terminals: [
-              { id: "t-level-1", terminalId: "TID-04471", channel: "in_store", label: "Mall of the Emirates" },
-              { id: "t-level-2", terminalId: "TID-ONLINE-08", channel: "online", label: "Website" },
+              { id: "t-level-1", terminalId: "TID-04471", channel: "in_store" },
+              { id: "t-level-2", terminalId: "TID-ONLINE-08", channel: "online" },
             ],
           },
         ],

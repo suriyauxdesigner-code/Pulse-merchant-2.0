@@ -333,13 +333,19 @@ export function BrandDetailPage() {
                     <div className="space-y-3">
                       {brand.merchantSetup.merchantAccounts.map((account) => (
                         <div key={account.id} className="rounded-[var(--radius-sm)] border border-border px-4 py-3">
-                          <p className="text-sm font-semibold text-foreground">{account.merchantId}</p>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="text-sm font-semibold text-foreground">{account.merchantId}</p>
+                            {account.labels.map((label) => (
+                              <Badge key={label} variant="outline">
+                                {label}
+                              </Badge>
+                            ))}
+                          </div>
                           <p className="text-xs text-muted-foreground mb-2.5">Merchant ID</p>
                           <div className="flex flex-wrap gap-1.5">
                             {account.terminals.map((t) => (
                               <Badge key={t.id} variant="outline">
                                 {t.terminalId} · {TERMINAL_CHANNEL_OPTIONS.find((o) => o.value === t.channel)?.label}
-                                {t.label ? ` · ${t.label}` : ""}
                               </Badge>
                             ))}
                           </div>

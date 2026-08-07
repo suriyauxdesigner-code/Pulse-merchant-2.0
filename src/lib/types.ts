@@ -11,12 +11,12 @@ export type TerminalEntry = {
   id: string
   terminalId: string
   channel: TerminalChannel
-  label: string
 }
 
 export type MerchantAccount = {
   id: string
   merchantId: string
+  labels: string[]
   terminals: TerminalEntry[]
 }
 
