@@ -57,6 +57,19 @@ function migrateBrand(raw: any): Brand {
   return { ...raw, merchantSetup: migrateMerchantSetup(raw?.merchantSetup) }
 }
 
+// Campaigns used to carry pre-live statuses ("submitted" / "processing" / "bank_approved")
+// while waiting on bank matching. That distinction is gone — the merchant only ever sees
+// "live" or "completed" now — so collapse any legacy pre-live status into "live" and
+// backfill a bank if one hadn't been assigned yet.
+function migrateCampaign(raw: any): Campaign {
+  if (raw?.status === "completed" || raw?.status === "live") return raw
+  return {
+    ...raw,
+    status: "live",
+    bankId: raw?.bankId || BANKS[Math.floor(Math.random() * BANKS.length)].id,
+  }
+}
+
 export const emptyBrandProfile = (): BrandProfile => ({
   shopChannels: [],
   competitors: [],
@@ -108,7 +121,7 @@ type AppState = {
   updateBrand: (id: string, patch: Partial<Brand>) => void
   removeBrand: (id: string) => void
 
-  addCampaign: (c: Omit<Campaign, "id" | "submittedAt" | "status" | "spent">) => Campaign
+  addCampaign: (c: Omit<Campaign, "id" | "submittedAt" | "status" | "spent" | "bankId">) => Campaign
   advanceCampaignStatus: (id: string) => void
   getCampaignsForBrand: (brandId: string) => Campaign[]
 
@@ -187,11 +200,14 @@ export const useAppStore = create<AppState>()(
         })),
 
       addCampaign: (c) => {
+        // Bank matching and approval happen behind the scenes — the merchant only
+        // ever sees a campaign once it's live, already paired with a bank partner.
         const campaign: Campaign = {
           ...c,
           id: makeId("camp"),
           submittedAt: new Date().toISOString(),
-          status: "submitted",
+          status: "live",
+          bankId: BANKS[Math.floor(Math.random() * BANKS.length)].id,
           spent: 0,
         }
         set((s) => ({ campaigns: [campaign, ...s.campaigns] }))
@@ -200,14 +216,7 @@ export const useAppStore = create<AppState>()(
 
       advanceCampaignStatus: (id) =>
         set((s) => ({
-          campaigns: s.campaigns.map((c) => {
-            if (c.id !== id) return c
-            const order: Campaign["status"][] = ["submitted", "processing", "bank_approved", "live"]
-            const idx = order.indexOf(c.status)
-            const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : c.status
-            const bankId = next === "bank_approved" && !c.bankId ? BANKS[Math.floor(Math.random() * BANKS.length)].id : c.bankId
-            return { ...c, status: next, bankId }
-          }),
+          campaigns: s.campaigns.map((c) => (c.id === id && c.status === "live" ? { ...c, status: "completed" } : c)),
         })),
 
       getCampaignsForBrand: (brandId) => get().campaigns.filter((c) => c.brandId === brandId),
@@ -217,13 +226,14 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "lune-merchant-app",
-      version: 2,
+      version: 3,
       migrate: (persistedState) => {
         const state = (persistedState as Partial<AppState>) || {}
         return {
           ...state,
           brands: (state.brands || []).map(migrateBrand),
           draftBrand: state.draftBrand ? migrateBrand(state.draftBrand as Brand) : null,
+          campaigns: (state.campaigns || []).map(migrateCampaign),
         }
       },
     }

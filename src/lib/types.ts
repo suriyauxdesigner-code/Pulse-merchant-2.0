@@ -53,7 +53,7 @@ export type CampaignGoal = "increase_sales" | "acquire_customers" | "clear_inven
 
 export type BudgetUtilization = "exhaust" | "duration"
 
-export type CampaignStatus = "submitted" | "processing" | "bank_approved" | "live" | "completed"
+export type CampaignStatus = "live" | "completed"
 
 export type Campaign = {
   id: string

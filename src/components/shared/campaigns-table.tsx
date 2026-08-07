@@ -68,7 +68,7 @@ export function CampaignsTable({
                     <span className="text-sm text-foreground">{bank.name}</span>
                   </div>
                 ) : (
-                  <span className="text-sm text-muted-foreground">Matching...</span>
+                  <span className="text-sm text-muted-foreground">—</span>
                 )}
               </TableCell>
               <TableCell className="font-semibold text-foreground">{c.cashbackPercent}%</TableCell>

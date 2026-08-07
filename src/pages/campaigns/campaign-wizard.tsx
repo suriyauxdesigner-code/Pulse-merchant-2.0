@@ -69,15 +69,15 @@ export function CampaignWizardPage() {
         <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-success-bg text-success-foreground">
           <PartyPopper className="size-7" />
         </div>
-        <h1 className="text-2xl font-bold text-foreground">Campaign submitted!</h1>
+        <h1 className="text-2xl font-bold text-foreground">Your campaign is live!</h1>
         <p className="mt-2 text-[15px] text-muted-foreground">
-          "{draft.name}" has been submitted for review. We'll match it with a bank partner and notify you as it progresses. It'll show up on your Campaign page once it's live.
+          "{draft.name}" is now live and appears on your Campaign page.
         </p>
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
           <Button variant="outline" onClick={() => navigate("/")}>
             Go to Dashboard
           </Button>
-          <Button onClick={() => navigate(`/campaigns/${submittedId}`)}>View Campaign Status</Button>
+          <Button onClick={() => navigate(`/campaigns/${submittedId}`)}>View Campaign</Button>
         </div>
       </div>
     )
@@ -92,7 +92,6 @@ export function CampaignWizardPage() {
       brandId: draft.brandId,
       name: draft.name,
       goal: draft.goal || "increase_sales",
-      bankId: null,
       budget: draft.budget,
       budgetUtilization: draft.budgetUtilization,
       durationDays: draft.durationDays,

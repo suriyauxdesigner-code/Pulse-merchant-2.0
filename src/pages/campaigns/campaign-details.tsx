@@ -1,11 +1,10 @@
 import type { ReactNode } from "react"
-import { ArrowLeft, Calendar, Wallet, Percent, ShieldCheck, Sparkles, ArrowUpRight } from "lucide-react"
+import { ArrowLeft, Calendar, Wallet, Percent, ShieldCheck, Sparkles } from "lucide-react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { StatusTimeline } from "@/components/shared/status-timeline"
 import { LogoTile } from "@/components/shared/logo-tile"
 import { MobileOfferDetailPreview } from "@/components/shared/mobile-offer-detail-preview"
 import { CAMPAIGN_GOALS, bankById } from "@/lib/data"
@@ -46,11 +45,10 @@ export function CampaignDetailsPage() {
   const spentPercent = campaign.budget > 0 ? Math.min(100, Math.round((campaign.spent / campaign.budget) * 100)) : 0
   const isLive = campaign.status === "live"
   const isCompleted = campaign.status === "completed"
-  const canAdvance = !isLive && !isCompleted
 
-  const handleAdvance = () => {
+  const handleMarkCompleted = () => {
     advanceCampaignStatus(campaign.id)
-    toast({ title: "Status updated", description: "Campaign has moved to the next stage.", variant: "success" })
+    toast({ title: "Campaign marked as completed", variant: "success" })
   }
 
   return (
@@ -68,29 +66,21 @@ export function CampaignDetailsPage() {
             <p className="text-sm text-muted-foreground">{brand?.name} · {goalLabel}</p>
           </div>
         </div>
-        <StatusBadge status={campaign.status} />
+        <div className="flex flex-col items-end gap-1.5">
+          <StatusBadge status={campaign.status} />
+          {isLive && (
+            <button
+              onClick={handleMarkCompleted}
+              className="text-xs font-medium text-muted-foreground hover:text-foreground hover:underline"
+            >
+              Demo: mark as completed
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="space-y-5">
-          <Card>
-            <CardHeader>
-              <CardTitle>Status</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <StatusTimeline status={campaign.status} />
-              {canAdvance && (
-                <div className="mt-6 flex items-center justify-between rounded-[var(--radius-sm)] bg-muted/50 px-4 py-3">
-                  <p className="text-xs text-muted-foreground">Demo control — simulate this campaign's progress</p>
-                  <Button variant="outline" size="sm" onClick={handleAdvance}>
-                    Advance to next stage
-                    <ArrowUpRight className="size-3.5" />
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>Timeline</CardTitle>
@@ -144,7 +134,7 @@ export function CampaignDetailsPage() {
                   <span className="text-sm font-medium text-foreground">{bank.name}</span>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">We're matching this campaign with a bank partner. You'll be notified once it's confirmed.</p>
+                <p className="text-sm text-muted-foreground">No bank partner assigned yet.</p>
               )}
             </CardContent>
           </Card>
