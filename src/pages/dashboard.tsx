@@ -1,11 +1,10 @@
 import type { ReactNode } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { Plus, Store, Megaphone, TrendingUp, Wallet, ChevronRight, Sparkles } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { Plus, Store, Megaphone, TrendingUp, Wallet, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { PageHeader } from "@/components/shared/page-header"
 import { EmptyState } from "@/components/shared/empty-state"
-import { LogoTile } from "@/components/shared/logo-tile"
 import { CampaignsExplorer } from "@/components/shared/campaigns-explorer"
 import { useAppStore, useAuthStore } from "@/lib/store"
 
@@ -54,41 +53,6 @@ export function DashboardPage() {
         <StatCard icon={<Sparkles className="size-[18px]" />} label="Live Campaigns" value={liveCampaigns.length} accent="success" />
         <StatCard icon={<Wallet className="size-[18px]" />} label="Cashback Given" value={`AED ${totalCashback.toLocaleString()}`} />
         <StatCard icon={<TrendingUp className="size-[18px]" />} label="Active Brands" value={brands.length} />
-      </div>
-
-      <div className="mt-8">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">Your brands</h2>
-          <Link to="/brands" className="flex items-center text-sm font-semibold text-primary hover:underline">
-            Manage brands
-            <ChevronRight className="size-3.5" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {brands.map((brand) => {
-            const brandCampaigns = campaigns.filter((c) => c.brandId === brand.id)
-            const live = brandCampaigns.filter((c) => c.status === "live").length
-            return (
-              <Card
-                key={brand.id}
-                className="cursor-pointer transition-shadow hover:shadow-elevated"
-                onClick={() => navigate(`/brands/${brand.id}`)}
-              >
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-3">
-                    <LogoTile name={brand.name} color={brand.logoColor} imageUrl={brand.logoUrl} size="lg" />
-                    <div className="min-w-0">
-                      <p className="font-semibold text-foreground truncate">{brand.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {live > 0 ? `${live} live campaign${live > 1 ? "s" : ""}` : `${brandCampaigns.length} total campaigns`}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
       </div>
 
       <div className="mt-8">
