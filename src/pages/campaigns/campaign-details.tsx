@@ -81,36 +81,56 @@ export function CampaignDetailsPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="space-y-5">
-          <Card>
-            <CardHeader>
-              <CardTitle>Timeline</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-3">
-              <TimelineItem icon={<Calendar className="size-4" />} label="Submitted" value={formatDate(campaign.submittedAt)} />
-              <TimelineItem icon={<Calendar className="size-4" />} label="Start Date" value={formatDate(campaign.startDate)} />
-              <TimelineItem icon={<Calendar className="size-4" />} label="End Date" value={campaign.budgetUtilization === "exhaust" ? "Until exhausted" : formatDate(campaign.endDate)} />
-            </CardContent>
-          </Card>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Performance</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {isLive || isCompleted ? (
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                      <p className="text-xl font-bold text-foreground">{Math.round(campaign.spent / Math.max(1, campaign.cashbackPercent) * 8).toLocaleString()}</p>
+                      <p className="text-xs text-muted-foreground">Transactions</p>
+                    </div>
+                    <div>
+                      <p className="text-xl font-bold text-foreground">AED {campaign.spent.toLocaleString()}</p>
+                      <p className="text-xs text-muted-foreground">Cashback given</p>
+                    </div>
+                    <div>
+                      <p className="text-xl font-bold text-foreground">{(3.1 + campaign.cashbackPercent / 10).toFixed(1)}x</p>
+                      <p className="text-xs text-muted-foreground">Estimated ROI</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2.5 text-muted-foreground">
+                    <Sparkles className="size-4" />
+                    <p className="text-sm">Performance data will appear here once your campaign goes live.</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Budget</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-end justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Spent</p>
-                  <p className="text-2xl font-bold text-foreground">AED {campaign.spent.toLocaleString()}</p>
+            <Card>
+              <CardHeader>
+                <CardTitle>Budget</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Spent</p>
+                    <p className="text-2xl font-bold text-foreground">AED {campaign.spent.toLocaleString()}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground">Remaining</p>
+                    <p className="text-lg font-semibold text-foreground">AED {remaining.toLocaleString()}</p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Remaining</p>
-                  <p className="text-lg font-semibold text-foreground">AED {remaining.toLocaleString()}</p>
-                </div>
-              </div>
-              <Progress value={spentPercent} />
-              <p className="text-xs text-muted-foreground">{spentPercent}% of AED {campaign.budget.toLocaleString()} total budget used</p>
-            </CardContent>
-          </Card>
+                <Progress value={spentPercent} />
+                <p className="text-xs text-muted-foreground">{spentPercent}% of AED {campaign.budget.toLocaleString()} total budget used</p>
+              </CardContent>
+            </Card>
+          </div>
 
           <Card>
             <CardHeader>
@@ -141,30 +161,12 @@ export function CampaignDetailsPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Performance</CardTitle>
+              <CardTitle>Timeline</CardTitle>
             </CardHeader>
-            <CardContent>
-              {isLive || isCompleted ? (
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <p className="text-xl font-bold text-foreground">{Math.round(campaign.spent / Math.max(1, campaign.cashbackPercent) * 8).toLocaleString()}</p>
-                    <p className="text-xs text-muted-foreground">Transactions</p>
-                  </div>
-                  <div>
-                    <p className="text-xl font-bold text-foreground">AED {campaign.spent.toLocaleString()}</p>
-                    <p className="text-xs text-muted-foreground">Cashback given</p>
-                  </div>
-                  <div>
-                    <p className="text-xl font-bold text-foreground">{(3.1 + campaign.cashbackPercent / 10).toFixed(1)}x</p>
-                    <p className="text-xs text-muted-foreground">Estimated ROI</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2.5 text-muted-foreground">
-                  <Sparkles className="size-4" />
-                  <p className="text-sm">Performance data will appear here once your campaign goes live.</p>
-                </div>
-              )}
+            <CardContent className="grid gap-4 sm:grid-cols-3">
+              <TimelineItem icon={<Calendar className="size-4" />} label="Submitted" value={formatDate(campaign.submittedAt)} />
+              <TimelineItem icon={<Calendar className="size-4" />} label="Start Date" value={formatDate(campaign.startDate)} />
+              <TimelineItem icon={<Calendar className="size-4" />} label="End Date" value={campaign.budgetUtilization === "exhaust" ? "Until exhausted" : formatDate(campaign.endDate)} />
             </CardContent>
           </Card>
         </div>
