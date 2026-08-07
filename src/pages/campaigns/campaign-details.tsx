@@ -82,13 +82,13 @@ export function CampaignDetailsPage() {
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="space-y-5">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Card>
+            <Card className="flex flex-col">
               <CardHeader>
                 <CardTitle>Performance</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex flex-1 items-center">
                 {isLive || isCompleted ? (
-                  <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="grid w-full grid-cols-3 gap-3 text-center">
                     <div>
                       <p className="text-xl font-bold text-foreground">{Math.round(campaign.spent / Math.max(1, campaign.cashbackPercent) * 8).toLocaleString()}</p>
                       <p className="text-xs text-muted-foreground">Transactions</p>
