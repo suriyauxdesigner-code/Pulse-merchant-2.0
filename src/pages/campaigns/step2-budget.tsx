@@ -2,7 +2,6 @@ import type { ReactNode } from "react"
 import { Info, Wallet } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
@@ -59,22 +58,25 @@ export function Step2Budget({
         )}
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <Label>Cashback Percentage</Label>
-          <span className="text-lg font-bold text-foreground">{draft.cashbackPercent}%</span>
+      <div className="grid gap-6 sm:grid-cols-3">
+        <div className="space-y-2">
+          <Label htmlFor="cashback-percent">Cashback Percentage</Label>
+          <div className="relative">
+            <Input
+              id="cashback-percent"
+              type="number"
+              min={1}
+              max={30}
+              className="pr-9"
+              value={draft.cashbackPercent}
+              onChange={(e) => onUpdate({ cashbackPercent: Number(e.target.value) || 0 })}
+              placeholder="10"
+            />
+            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">%</span>
+          </div>
+          <FieldHint>The percentage of each purchase a shopper gets back as cashback. Higher rates attract more attention from bank partners.</FieldHint>
         </div>
-        <Slider
-          min={1}
-          max={30}
-          step={1}
-          value={[draft.cashbackPercent]}
-          onValueChange={([v]) => onUpdate({ cashbackPercent: v })}
-        />
-        <FieldHint>The percentage of each purchase a shopper gets back as cashback. Higher rates attract more attention from bank partners.</FieldHint>
-      </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="cap">Cashback Cap</Label>
           <div className="relative">
