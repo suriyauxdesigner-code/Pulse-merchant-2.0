@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { ArrowLeft, Calendar, Wallet, Percent, ShieldCheck, Sparkles } from "lucide-react"
+import { ArrowLeft, Calendar, Wallet, Percent, ShieldCheck, Sparkles, Receipt, TrendingUp } from "lucide-react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,6 +10,7 @@ import { MobileOfferDetailPreview } from "@/components/shared/mobile-offer-detai
 import { CAMPAIGN_GOALS, bankById } from "@/lib/data"
 import { useAppStore } from "@/lib/store"
 import { toast } from "@/hooks/use-toast"
+import { cn } from "@/lib/utils"
 
 function formatDate(iso: string | null) {
   if (!iso) return "—"
@@ -81,56 +82,53 @@ export function CampaignDetailsPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="space-y-5">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Card className="flex flex-col">
-              <CardHeader>
-                <CardTitle>Performance</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-1 items-center">
-                {isLive || isCompleted ? (
-                  <div className="grid w-full grid-cols-3 gap-3 text-center">
-                    <div>
-                      <p className="text-xl font-bold text-foreground">{Math.round(campaign.spent / Math.max(1, campaign.cashbackPercent) * 8).toLocaleString()}</p>
-                      <p className="text-xs text-muted-foreground">Transactions</p>
-                    </div>
-                    <div>
-                      <p className="text-xl font-bold text-foreground">AED {campaign.spent.toLocaleString()}</p>
-                      <p className="text-xs text-muted-foreground">Cashback given</p>
-                    </div>
-                    <div>
-                      <p className="text-xl font-bold text-foreground">{(3.1 + campaign.cashbackPercent / 10).toFixed(1)}x</p>
-                      <p className="text-xs text-muted-foreground">Estimated ROI</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2.5 text-muted-foreground">
-                    <Sparkles className="size-4" />
-                    <p className="text-sm">Performance data will appear here once your campaign goes live.</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
+          {isLive || isCompleted ? (
+            <div className="grid grid-cols-3 gap-4">
+              <MetricCard
+                icon={<Receipt className="size-[18px]" />}
+                label="Transactions"
+                value={Math.round((campaign.spent / Math.max(1, campaign.cashbackPercent)) * 8).toLocaleString()}
+              />
+              <MetricCard
+                icon={<Wallet className="size-[18px]" />}
+                label="Cashback given"
+                value={`AED ${campaign.spent.toLocaleString()}`}
+              />
+              <MetricCard
+                icon={<TrendingUp className="size-[18px]" />}
+                label="Estimated ROI"
+                value={`${(3.1 + campaign.cashbackPercent / 10).toFixed(1)}x`}
+                accent="success"
+              />
+            </div>
+          ) : (
             <Card>
-              <CardHeader>
-                <CardTitle>Budget</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-end justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Spent</p>
-                    <p className="text-2xl font-bold text-foreground">AED {campaign.spent.toLocaleString()}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-muted-foreground">Remaining</p>
-                    <p className="text-lg font-semibold text-foreground">AED {remaining.toLocaleString()}</p>
-                  </div>
-                </div>
-                <Progress value={spentPercent} />
-                <p className="text-xs text-muted-foreground">{spentPercent}% of AED {campaign.budget.toLocaleString()} total budget used</p>
+              <CardContent className="flex items-center gap-2.5 p-5 text-muted-foreground">
+                <Sparkles className="size-4" />
+                <p className="text-sm">Performance data will appear here once your campaign goes live.</p>
               </CardContent>
             </Card>
-          </div>
+          )}
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Budget Utilization</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-end justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Spent</p>
+                  <p className="text-2xl font-bold text-foreground">AED {campaign.spent.toLocaleString()}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-muted-foreground">Remaining</p>
+                  <p className="text-lg font-semibold text-foreground">AED {remaining.toLocaleString()}</p>
+                </div>
+              </div>
+              <Progress value={spentPercent} />
+              <p className="text-xs text-muted-foreground">{spentPercent}% of AED {campaign.budget.toLocaleString()} total budget used</p>
+            </CardContent>
+          </Card>
 
           <Card>
             <CardHeader>
@@ -195,6 +193,35 @@ export function CampaignDetailsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+function MetricCard({
+  icon,
+  label,
+  value,
+  accent,
+}: {
+  icon: ReactNode
+  label: string
+  value: string
+  accent?: "success"
+}) {
+  return (
+    <Card>
+      <CardContent className="p-5">
+        <div
+          className={cn(
+            "mb-3 flex size-9 items-center justify-center rounded-[var(--radius-sm)]",
+            accent === "success" ? "bg-success-bg text-success-foreground" : "bg-secondary text-secondary-foreground"
+          )}
+        >
+          {icon}
+        </div>
+        <p className="text-2xl font-bold text-foreground">{value}</p>
+        <p className="text-sm text-muted-foreground">{label}</p>
+      </CardContent>
+    </Card>
   )
 }
 
