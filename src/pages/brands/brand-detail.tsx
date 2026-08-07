@@ -185,13 +185,12 @@ export function BrandDetailPage() {
         </TabsList>
 
         <TabsContent value="overview">
-          <div className="grid gap-5 lg:grid-cols-2">
-            <div className="space-y-5">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Brand Details</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+          <div className="grid gap-5 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <CardTitle>Brand Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
                   <Field label="Official Brand Name" editing={editing}>
                     {editing ? <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /> : brand.name}
                   </Field>
@@ -269,14 +268,12 @@ export function BrandDetailPage() {
                   </Field>
                 </CardContent>
               </Card>
-            </div>
 
-            <div className="space-y-5">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Business Metrics</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-5">
+            <Card>
+              <CardHeader>
+                <CardTitle>Business Metrics</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-5">
                   <div className="space-y-1.5">
                     <Label>Average Order Value (AED)</Label>
                     {editing ? (
@@ -330,28 +327,7 @@ export function BrandDetailPage() {
                   </div>
                 </CardContent>
               </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2.5">
-                  <Button className="w-full" onClick={() => navigate("/campaigns/new", { state: { brandId: brand.id } })}>
-                    <Plus className="size-4" />
-                    Create Campaign
-                  </Button>
-                  <Button variant="outline" className="w-full" onClick={() => setTab("campaigns")}>
-                    <Megaphone className="size-4" />
-                    View Campaigns
-                  </Button>
-                  <Button variant="outline" className="w-full" onClick={() => setTab("merchant")}>
-                    <Store className="size-4" />
-                    Merchant Setup
-                  </Button>
-                </CardContent>
-              </Card>
             </div>
-          </div>
         </TabsContent>
 
         <TabsContent value="campaigns" className="space-y-5">
